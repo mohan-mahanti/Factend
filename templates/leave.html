@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <link href="{% static 'css/signup.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <div class="container" id="form-container">
+            <h3 id="welcome_note">Clock in with confidence - our face recognition technology has you covered</h3>
+            <form id="regForm"  action="leave" method="POST">
+                {% csrf_token %}
+        
+                <h3>Leave Application Form</h3><br>
+                {% for message in messages %}
+                {% if message.tags == 'success' %}
+                <h5 style="color:green">{{message}}</h5>
+                {% else %}
+                <h5 style="color:red">{{message}}</h5>
+                {% endif %}
+                
+                {% endfor %}
+                   
+                   
+                    <h6><label for="leave_type">Leave Type:</label>
+                    <select id="leave_type" name="leave_type">
+                    <option value="paid leave">paid leave</option>
+                    <option value="bereavement leave">bereavement leave</option>
+                    <option value="Maternity and Paternity Leave">Maternity and Paternity Leave</option>
+                    <option value="Leave with out pay">Leave with out pay</option>
+                    </select></h6>
+                    <h6><label for="from_date">From Date</label><h6>
+                    <p><input type="date" class="form-control" id="from_date" name="from_date" required></p>
+                    <h6><label for="to_date">To Date</label><h6>
+                    <p><input type="date" class="form-control" id="to_date" name="to_date" required></p>
+                    <h6><label for="branch_id">Branch ID</label><h6>
+                    <p><input type="text" class="form-control" id="branch_id" name="branch_id" required></p>
+                    <button type="submit" class="btn btn-success">Apply Leave</button>
+                   
+                    
+                   
+                    
+            </form>
+        </div>
+        
+        <script src="" async defer></script>
+    </body>
+</html>

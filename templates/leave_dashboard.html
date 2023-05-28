@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <style>
+            body{
+                background-color:#F6F7C1;
+            }
+           
+            .container{
+                margin-top:5%;
+            }
+            .buttons{
+                margin-top:10px;
+            }
+            #pie{
+                width:120%;
+            }
+        </style>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="/">Facetend</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/profiles/employee_profile/{{ request.session.employee_id }}">{{ request.session.employee_name }}</a>
+                </li>
+               
+              </ul>
+              <span class="navbar-text">
+                <a class="nav-link btn btn-outline-danger" href="/company/logout">Log out</a>
+              </span>
+            </div>
+          </nav>
+          <div class="container">
+            <div class="row g-2">
+                <div class="col-md-8">
+                    <h3>Leave requests submitted by you:</h3>
+                    <table class="table  table-bordered">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Leave Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in my_leaves %}
+                            <tr class="table-active">
+                                <td>{{ row.2 }}</td>
+                                <td>{{ row.3 }}</td>
+                                <td>{{ row.4 }}</td>
+                                <td>{{ row.5 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <img src="data:image/png;base64,{{ pie }}" alt="My Chart" id="pie">
+                    
+                </div>
+            </div>
+            <div class="row g-2">
+                <div class="col-md-8">
+                    <h3>Leave requests for your approval:</h3>
+                    <table class="table  table-bordered">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Employee ID</th>
+                                <th>Branch ID</th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Leave Type</th>
+                                <th>Take Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in leaves_toapprove %}
+                            <tr class="table-active">
+                                <td>{{ row.0 }}</td>
+                                <td>{{ row.1 }}</td>
+                                <td>{{ row.2 }}</td>
+                                <td>{{ row.3 }}</td>
+                                <td>{{ row.4 }}</td>
+                                <td >
+                                    <form method="POST" action="process_leave">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="employee_id" value="{{ row.0 }}">
+                                        <input type="hidden" name="branch_id" value="{{ row.1 }}">
+                                        <input type="hidden" name="from_date" value="{{ row.2 }}" >
+                                        <input type="hidden" name="to_date" value="{{ row.3 }}" >
+                                        <input type="hidden" name="leave_type" value="{{ row.4 }}">
+                                        <input type="hidden" name="action" id="action" value="">
+                                        <button type="submit" name="approve" class="btn btn-success btn-sm buttons">Approve</button>
+                                        <button type="submit" name="reject" class="btn btn-danger btn-sm buttons">Reject</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+          </div>
+        <script src="" async defer></script>
+        <script>
+            $(document).ready(function() {
+                $('button[name="approve"]').click(function() {
+                  $('#action').val('approve');
+                });
+                $('button[name="reject"]').click(function() {
+                  $('#action').val('reject');
+                });
+              });
+        </script>
+    </body>
+</html>

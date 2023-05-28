@@ -1,0 +1,102 @@
+
+{% load static %}
+
+<link href="{% static 'css/signup.css' %}" rel="stylesheet">
+
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+<style>
+   #otpInput{
+    display : none;
+   }
+   #verify_mail{
+    display : none;
+   }
+   #error_message{
+    color:#F94A29
+   }
+   #ask_login{
+    color:#301E67
+   }
+   
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<div class="container" id="form-container">
+    <h3 id="welcome_note">Welcome companies! We are thrilled to have you on board with our facial recognition attendance app.
+        <br> With this cutting-edge technology, you'll be able to streamline your daily attendance process and save time in the process. Get ready to experience enhanced security and accuracy in tracking employee attendance. We can't wait to see how this app will transform your workplace. 
+        <br>Let's get started with filling below details!</h3>
+    <form id="regForm"  action="signup" method="POST">
+        {% csrf_token %}
+
+        <h1>Company Registration Form:</h1>
+        
+        {% for message in messages %}
+            <h5 id="error_message">{{message}}</h5>
+        {% endfor %}
+        
+        
+        
+        <!-- One "tab" for each step in the form: -->
+        <div class="tab form-group">
+            <h3>Company details:</h3>
+            <p><input class="form-control" type="text" maxlength="50" size="40" required id="company_name" name="company_name" pattern="[0-9a-zA-Z$_ ]{2,}" placeholder="Company Name" oninput="this.className = ''"></p>
+            <p><input class="form-control" type="text" maxlength="50" required size="40" id="company_founder" name="company_founder" pattern="[A-Za-z ]{2,}" placeholder="Company Founder" oninput="this.className = ''"></p>
+            <label for="established">Established on:</label></br>
+            <p><input class="form-control" type="date" id="established" name="established" oninput="this.className = ''" required></p>
+            <p><input type="tel" class="form-control" id="company_contact" name="company_contact" placeholder="enter 10 digit mobile no." required pattern="[0-9]{10}" oninput="this.className = ''"></p>
+            <p><input type="email" class="form-control" id="email" name="company_email" placeholder="enter company email" oninput="this.className = ''" required></p>
+             <p> <input type="text" class="form-control" id="otpInput" name="user_otp" placeholder="enter your OTP"></p>
+            <p><span><button id="verifyEmailButton" class="btn btn-primary btn-sm" type="button" >Verify Email</button></span>
+            <span><button type="button" class="btn btn-primary btn-sm" id="verify_mail" onclick="verifyOTP()">Verify</button></span>
+            <span id="email_fail"></span></p>
+            
+            
+            
+            
+            <p><input type="Password" class="form-control" id="password" name="password" placeholder="Enter Password" pattern="[A-Za-z0-9_$#*@!%^~]{8,}" maxlength="15" required></p>
+            <p><input type="Password" class="form-control" id="cpwd" placeholder="re-enter password" pattern="[A-Za-z0-9_$#*@!%^~]{8,}" maxlength="15" required onkeyup="validate_password()"></p>
+            <span id="match_password"></span>   
+            <p><input type="url" class="form-control" id="company_url" name="company_url" placeholder="enter company url" oninput="this.className = ''"></p>
+        
+            <h3>Main Branch Info:</h3>
+           
+            <p><input type="text" maxlength="50" class="form-control" id="mainbranch_name" name="mainbranch_name" placeholder="main branch name" pattern="[0-9a-zA-Z$_ ]{2,}" required oninput="this.className = ''"></p>
+            <label for="mainbranch_latitude">Main Branch Location:</label><br>
+            <small>*you can click on the button to detect location automatically*</small>
+            <p>
+                <input type="text" class="form-control" id="branch_latitude" name="branch_latitude" placeholder=" enter latitude eg: 11.1111111" pattern="[0-9.]{1,}" required oninput="this.className = ''"><br>
+                <br>
+                <input type="text" class="form-control" id="branch_longitude" name="branch_longitude" placeholder="enter longitude eg: 11.1111111" pattern="[0-9.]{1,}" required oninput="this.className = ''">
+                <p id="location_detect_status"></p>
+                <span><button type="button" onclick="detect_location()"><img src="{% static 'img/location_favicon.png' %}" width="20" height="20"></button></span>
+            </p>
+            <label for="mainbranch_area">Enter the area range in meters :</label><br>
+            <small>**This is the circle radius within which an employee can mark attendance from above location**</small>
+            <p><input type="number" class="form-control" id="branch_area" name="branch_area" required placeholder="ex. 50" oninput="this.className = ''"></p>
+
+        </div>
+        
+       
+        
+        <div style="overflow:auto;">
+            <div style="float:left;">
+                <a id="ask_login" href="/company/company_login">Already have an account login instead?</a>
+            </div>
+        <div style="float:right;">
+            
+            <button type="submit" id="nextBtn"  disabled=True>Submit</button>
+        </div>
+        </div>
+        
+        
+        
+    </form>
+</div>
+<div>
+    
+</div>
+
+    <script src="{% static 'js/signup.js' %}"></script>
+    <script src="{% static 'js/validations.js' %}"></script>

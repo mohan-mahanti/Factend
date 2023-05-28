@@ -1,0 +1,60 @@
+
+{% load static %}
+
+
+<link href="{% static 'css/signup.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+
+<div class="container" id="form-container">
+    <h3 id="welcome_note">Clock in with confidence - our face recognition technology has you covered</h3>
+    <form id="regForm"  action="add_branch" method="POST">
+        {% csrf_token %}
+
+        <h3>Add your Branch Details:</h3><br>
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+        <h5 style="color:green">{{message}}</h5>
+        {% else %}
+        <h5 style="color:red">{{message}}</h5>
+        {% endif %}
+        
+        {% endfor %}
+           
+           
+            <p><input type="text" maxlength="50" class="form-control" id="branch_name" name="branch_name" placeholder="branch name" pattern="[0-9a-zA-Z$_]{1,}" required oninput="this.className = ''"></p>
+            <h6><label for="mainbranch_latitude">Branch Location:</label><h6>
+            <small>*you can click on the button to detect location automatically*</small>
+            <p>
+                <input type="text" class="form-control" id="branch_latitude" name="branch_latitude" placeholder=" enter latitude eg: 11.1111111" pattern="[0-9.]{1,}" required oninput="this.className = ''"><br>
+                
+                <input type="text" class="form-control" id="branch_longitude" name="branch_longitude" placeholder="enter longitude eg: 11.1111111" pattern="[0-9.]{1,}" required oninput="this.className = ''">
+                <p id="location_detect_status"></p>
+                <span><button type="button" class="btn btn-primary" onclick="detect_location()"><img src="{% static 'img/location_favicon.png' %}" width="20" height="20"></button></span>
+            </p>
+            <h6><label for="branch_area">Enter the area range in meters :</label></h6>
+            <small>**This is the circle radius within which an employee can mark attendance from above location**</small>
+            <p><input type="number" class="form-control" id="branch_area" name="branch_area" placeholder="ex. 50" oninput="this.className = ''"></p>
+            <button type="submit" class="btn btn-success">Add Branch</button>
+            
+           
+            
+    </form>
+</div>
+<script>
+    function detect_location() {
+        const success=(position)=>{
+            const latitude=position.coords.latitude;
+            const longitude=position.coords.longitude;
+            document.getElementById("branch_latitude").setAttribute('value',latitude);
+            document.getElementById("branch_longitude").setAttribute('value',longitude);
+        }
+        const error=()=>{
+            document.getElementById("location_detect_status").innerHTML="unable to detect location please enter manually";
+    
+        }
+        navigator.geolocation.getCurrentPosition(success,error);
+        
+    }
+</script>
+        

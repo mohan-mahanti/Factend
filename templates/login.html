@@ -1,0 +1,37 @@
+
+{% load static %}
+<style>
+    #error_message{
+        color:#F94A29
+       }
+</style>
+
+<link href="{% static 'css/signup.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+
+<div class="container" id="form-container">
+    <h3 id="welcome_note">Simplify your workday and focus on what really matters with our time-saving login</h3>
+    <form id="regForm"  action="login" method="POST">
+        {% csrf_token %}
+
+        <h1>Employee Login:</h1>
+        {% for message in messages %}
+        <h5 id="error_message">{{message}}</h5>
+        {% endfor %}
+            
+            <label for="company_id">Company ID:</label><br>
+            <p><input class="form-control" type="text" maxlength="50" size="40" required id="company_id" name="company_id" placeholder="Ex. C1" oninput="this.className = ''"></p>
+            <label for="branch_id">Branch id:</label><br>
+            <p><input class="form-control" type="text" maxlength="50" size="40" id="branch_id" name="branch_id" placeholder="Ex. B1" oninput="this.className = ''"></p>
+            <label for="employee_id">Employee id:</label><br>
+            <p><input class="form-control" type="text" id="employee_id" name="employee_id" placeholder="" oninput="this.className = ''"></p>
+            <label for="password">Password:</label><br>
+            <p><input type="password" class="form-control" id="password" name="password" placeholder="" oninput="this.className = ''"></p>
+            <button type="submit" class="btn btn-primary">Login</button>
+            
+           
+            
+    </form>
+</div>
+        
